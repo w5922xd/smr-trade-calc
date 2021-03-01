@@ -1,36 +1,37 @@
-import { TradeGood, TradeInstance, TradeMode, TradeSet, TradeState } from "./Types";
+import { Faction as Faction, Relation, TradeGood, TradeInstance, TradeMode, TradeSet, TradeState } from "./Types";
 
-
-
-
-
-
-export const CreateTradeSet = (id: number): TradeSet => {
+export const CreateTradeSet = (id: number, initialRelation: Relation): TradeSet => {
     return {
       Id: id,
-      Buy: getTradeInstance(TradeMode.Buy), 
-      Sell: getTradeInstance(TradeMode.Sell) 
+      Buy: getTradeInstance(TradeMode.Buy, initialRelation), 
+      Sell: getTradeInstance(TradeMode.Sell, initialRelation) 
     };
   }
 
+export const getTradeInstance = (mode: TradeMode, initialRelation: Relation): TradeInstance => { 
 
-
-  
-export const getTradeInstance = (mode: TradeMode): TradeInstance => { 
     return { 
         Mode: mode,
-        Good: FindTradeGood('Luxury Items'),
-        //Good: string = 'Luxury Items';
-        //GoodPrice: number = 231;
+        Good: findTradeGood('Luxury Items'),
         NumberOfGoods: 250,
         Distance:  5,
         Stock:  4000,
-        PortRace:  'Neutral',
-        PortRelation: 0  
+        PortRelation: initialRelation
     }
 };
 
-export const FindTradeGood = (goodName: string) => {
+export const findRelation = (raceName: string, relations: Relation[]) => {
+    let relation = {} as Relation;
+    for(let r in relations){
+        if(raceName === relations[r].Race){
+            return relations[r];
+        }
+    }
+    
+    return relation;
+}
+
+export const findTradeGood = (goodName: string) => {
     let tradeGood = {} as TradeGood;
     for(let t in TradeGoods){
         if(TradeGoods[t].Name === goodName){
@@ -88,23 +89,19 @@ export const TradeGoods =  [
     }
 ];
 
-export const Factions = [
-    'Neutral',
-    'Alskant',
-    'Creonti',
-    'Human',
-    'Ik\'Thorne',
-    'Salvene',
-    'Thevian',
-    'WQ Human',
-    'Nijarin'
-];
-
-export const InitialState = (): TradeState => {    
-    return {
-        TradeSets: [CreateTradeSet(0)]
-    // Relations: Factions.map(f => { 
-    //     return { Race: f, Value: 0}
-    // })
+export const initialState = (): TradeState => { 
+    const factions = (): Relation[] => {
+        let factionList: Relation[] = [];
+        for (let f in Faction){
+            factionList.push({Race: f, Value: 0});
+        }
+        console.log("factionlist", factionList);
+        return factionList;
     }
+
+    const relations = factions();
+    return {
+        TradeSets: [CreateTradeSet(0, relations[0])],
+        Relations: relations
+    };
 };

@@ -1,32 +1,25 @@
 import React, { useReducer } from 'react';
 import './App.css';
-import { Button, createStyles, Grid, makeStyles, Theme, Typography } from '@material-ui/core';
+import { Grid, IconButton, Typography } from '@material-ui/core';
 import { TradeBase } from './TradeBase';
-import {  ActionType, TradeInstance, TradeState } from './Types';
-import { InitialState } from './State';
+import {  ActionType, TradeState } from './Types';
+import { initialState } from './State';
 import { tradeReducer } from './TradeReducer';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    
-  }),
-);
-
-const TradeContext = React.createContext(null);
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
 
 function App() {
 
-  const [tradeState, dispatch] : [TradeState, Function] = useReducer(tradeReducer, InitialState());
-
+  const [tradeState, dispatch] : [TradeState, Function] = useReducer(tradeReducer, initialState());
 
   const buildTrades = tradeState.TradeSets.map(t => {
     return (
-      <Grid container direction="row" justify="center" alignItems="center" spacing={1}>
-        <Grid item xs={6}>       
-          <TradeBase trade={t.Buy} dispatch={dispatch} id={t.Id}  /> 
+      <Grid container direction="row" justify="center" alignItems="center" spacing={4}>
+        <Grid item xs={10} sm={6}>       
+          <TradeBase trade={t.Buy} dispatch={dispatch} id={t.Id} relations={tradeState.Relations}  /> 
         </Grid>
-        <Grid item xs={6}>       
-          <TradeBase trade={t.Sell} dispatch={dispatch} id={t.Id} /> 
+        <Grid item xs={10} sm={6}>       
+          <TradeBase trade={t.Sell} dispatch={dispatch} id={t.Id} relations={tradeState.Relations} /> 
         </Grid>           
       </Grid>
     )
@@ -34,21 +27,37 @@ function App() {
   
   return (
     <div className="App">
-      <Typography variant="h4" color="primary" component="h1" gutterBottom>
-        SMR Trade Calculator
-      </Typography>
+      <Grid container spacing={1} justify="center" alignItems="center" direction="column" >
+        <Grid item xs={12}>
+          <Typography variant="h3" color="primary" component="h1" gutterBottom>
+            SMR Trade Calculator
+          </Typography>
+        </Grid>
 
-      <Grid container spacing={1} justify="center" alignItems="center" direction="row" >
-        <Grid item>
-          <Button variant="contained" color="secondary" onClick={() => dispatch({ Type: ActionType.AddTradeSet, Payload: null })}>Add Trade Set</Button>
+        <Grid item xs={12}>
+          <Grid container spacing={1} justify="center" alignItems="center" direction="row" >
+            <Grid item>
+              <IconButton color="primary" onClick={() => dispatch({ Type: ActionType.AddTradeSet, Payload: null })}>
+                <AddIcon />
+              </IconButton>         
+            </Grid>
+            <Grid item>
+              <Typography color="primary" variant="h4">Trade Sets</Typography>
+            </Grid>
+            <Grid item>
+              <IconButton color="primary" onClick={() => dispatch({ Type: ActionType.RemoveTradeSet, Payload: null })}>
+                <RemoveIcon />
+              </IconButton>          
+            </Grid>
+          </Grid>
         </Grid>
-        <Grid item>
-          <Button variant="contained" color="secondary" onClick={() => dispatch({ Type: ActionType.RemoveTradeSet, Payload: null })}>Remove Trade Set</Button>
-        </Grid>
-      </Grid>
+
         
-        <br /><br />
-        {buildTrades}
+        <Grid item xs={12}>
+          {buildTrades}
+        </Grid>
+
+      </Grid>
     </div>
   );
 }

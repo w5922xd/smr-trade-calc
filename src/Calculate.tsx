@@ -12,7 +12,7 @@ export const Calculate = ({trade}: Props) => {
         let rate = isBuy ? 0.03 : 0.088;
         let priceRatio = trade.Good.Price * trade.NumberOfGoods;
         let stockRatio = trade.Stock / trade.Good.StockMax;
-        let relationRatio = trade.PortRelation / 1000;
+        let relationRatio = trade.PortRelation.Value / 1000;
         let price; 
 
         if(isBuy){

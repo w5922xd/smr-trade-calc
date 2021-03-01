@@ -10,8 +10,6 @@ export interface TradeSet {
     Sell: TradeInstance;
 }
 
-
-
 export enum TradeMode {
     Buy, 
     Sell
@@ -29,14 +27,13 @@ export interface TradeInstance {
     NumberOfGoods: number;
     Distance: number;
     Stock: number;
-    PortRace: string;
-    PortRelation: number;
+    PortRelation: Relation;
 }
 
 
 export interface TradeState {
     TradeSets: TradeSet[];
-    //Relations: Relation[];    
+    Relations: Relation[];    
 }
 
 export interface Action {
@@ -44,14 +41,17 @@ export interface Action {
     Payload: any;
 }
 
-
-// export const ActionType = {
-//     "AddTradeSet" : "addTradeSet",
-//     "RemoveTradeSet" : "removeTradeSet",
-//     "UpdateTradeInstance" : "updateTradeInstance",
-//     "UpdateRelation" : "updateRelation",
-//     "SelectGood"  : "selectGood"
-// };
+export const Faction = { 
+    'Neutral': 'Neutral',
+    'Alskant': 'Alskant',
+    'Creonti': 'Creonti',
+    'Human': 'Human',
+    'Ik\'Thorne': 'Ik\'Thorne',
+    'Salvene': 'Salvene',
+    'Thevian': 'Thevian',
+    'WQ Human': 'WQ Human',
+    'Nijarin': 'Nijarin'
+};
 
 export enum ActionType {
     AddTradeSet,

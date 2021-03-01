@@ -1,6 +1,6 @@
 
 import { CreateTradeSet } from "./State";
-import { Action, ActionType, TradeInstance, TradeMode, TradeSet, TradeState } from "./Types";
+import { Action, ActionType, Relation, TradeInstance, TradeMode, TradeSet, TradeState } from "./Types";
 
 
 
@@ -13,18 +13,47 @@ export const tradeReducer = (state: TradeState, action: Action): TradeState => {
     case ActionType.UpdateTradeInstance:
         return updateTradeSet(state, action);
     case ActionType.UpdateRelation:
-      //return state.filter((_task, i) => action.payload.taskId !== i);
-      return state;
+        return updateRelations(state, action);
     default:
       return state;
   }
 }
 
+const updateRelations = (state: TradeState, action: Action) => {
+    let relations: Relation[] = [...state.Relations];    
+    let sets = [...state.TradeSets];
+    let newTradeState = {...state};
+    let updatedRelation = {} as Relation;
+    debugger;
+    for(let r in relations){
+        if(action.Payload.Trade.PortRelation.Race === relations[r].Race){
+            updatedRelation.Race = action.Payload.Trade.PortRelation.Race;
+            updatedRelation.Value = action.Payload.Trade.PortRelation.Value;
+            relations[r] = updatedRelation;
+        }
+    }
+
+
+    
+    let isBuy = action.Payload.Trade.Mode === TradeMode.Buy;
+    if(isBuy){        
+        sets[action.Payload.Id].Buy = action.Payload.Trade;
+    } else {
+        sets[action.Payload.Id].Sell = action.Payload.Trade;
+    }
+
+    newTradeState.Relations = relations;
+    newTradeState.TradeSets = sets;
+    return newTradeState;
+
+}
+
 const updateTradeSet = (state: TradeState, action: Action) => {
+
     let sets: TradeSet[] = [...state.TradeSets];
     let tradeInstance = {...action.Payload.Trade};
     let isBuy = tradeInstance.Mode === TradeMode.Buy;
-    debugger;
+
     if(isBuy){
         sets[action.Payload.Id].Buy = tradeInstance;
     } else {
@@ -36,7 +65,7 @@ const updateTradeSet = (state: TradeState, action: Action) => {
 
 export const incrementTradeSet = (state: TradeState) => {
     let sets = [...state.TradeSets];
-    sets.push(CreateTradeSet(state.TradeSets.length));
+    sets.push(CreateTradeSet(state.TradeSets.length, state.Relations[0]));
     return {...state, TradeSets: sets};
 }
 
@@ -60,4 +89,15 @@ export const addTradeSet = (trade: TradeInstance, id: number): Action => {
       }
     };
   }
+
+export const updateRelation = (trade: TradeInstance, relations: Relation[], id: number) => {
+    return {
+        Type: ActionType.UpdateRelation,
+        Payload: {
+            Trade: trade, 
+            Relations: relations,
+            Id: id
+        }
+      };
+}
   

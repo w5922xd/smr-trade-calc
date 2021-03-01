@@ -1,19 +1,17 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import Link from '@material-ui/core/Link';
-import SvgIcon from '@material-ui/core/SvgIcon';
-import Typography from '@material-ui/core/Typography';
-import { Button, FormControl, InputLabel, TextField, Select, MenuItem, FormGroup, Grid, Card, CardContent } from '@material-ui/core';
-import { ActionType, TradeInstance } from './Types';
+import { FormControl, TextField, Grid, Card, CardContent } from '@material-ui/core';
+import { Relation, TradeInstance } from './Types';
 import { Calculate } from './Calculate';
 import { Goods } from './Goods';
-import { Factions } from './State';
 import { addTradeSet } from './TradeReducer';
+import { Relations } from './Relations';
 
 interface Props{
     trade: TradeInstance;
     dispatch: Function;
     id: number;
+    relations: Relation[];
  }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -29,19 +27,8 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export const TradeBase = ({trade, dispatch, id}: Props) => {
+export const TradeBase = ({trade, dispatch, id, relations}: Props) => {
     const classes = useStyles();
-
-    const buildPortRaceItems = () => {
-        var menuItems = [];
-        for(let item in Factions){
-            menuItems.push(<MenuItem key={item} value={item} color="secondary">{item}</MenuItem>);
-        }
-        return menuItems;
-    }
-
-    const handleGoodChange = (event: any) => {
-    }
 
     const handleChange = (event: any) => {
         let updatedTrade = {...trade};
@@ -60,25 +47,7 @@ export const TradeBase = ({trade, dispatch, id}: Props) => {
                     </Grid>
 
                     <Grid item xs={12}>
-                    <FormControl className={classes.formControl}>
-                            <InputLabel id="portRaceLabel">Port Race</InputLabel>
-                            <Select
-                                labelId="portRaceLabel"
-                                id="portRace"
-                                value={trade.PortRace}
-                                onChange={(e) => handleGoodChange(e)}
-                                label="Port Race">
-
-                                {() => buildPortRaceItems()}
-
-                            </Select>
-                        </FormControl>
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <FormControl className={classes.formControl}>
-                            <TextField id="PortRelation" label="Port Relations" value={trade.PortRelation} onChange={handleChange} />
-                        </FormControl>
+                        <Relations trade={trade} id={id} relations={relations} dispatch={dispatch} handleChange={handleChange} />
                     </Grid>
 
                     <Grid item xs={12}>
@@ -105,29 +74,8 @@ export const TradeBase = ({trade, dispatch, id}: Props) => {
                     <Grid item xs={12}>
                         <Calculate trade={trade} />
                     </Grid>
-
-                    {/* <Grid item xs={12}>
-                        <FormControl className={classes.formControl}>
-                            <TextField id="OptimalPrice" label="Optimal Price" value={trade.OptimalPrice} />
-                        </FormControl>
-                    </Grid> */}
-                    
                 </Grid>
             </CardContent>
         </Card>
     );
 }
-
-//export default Trade;
-// export default function ProTip() {
-//   const classes = useStyles();
-//   return (
-//     <Typography className={classes.root} color="textSecondary">
-//       <LightBulbIcon className={classes.lightBulb} />
-//       Pro tip: See more{' '}
-//       <Link href="https://material-ui.com/getting-started/templates/">templates</Link> on the
-//       Material-UI documentation.
-//     </Typography>
-//   );
-// }
-
