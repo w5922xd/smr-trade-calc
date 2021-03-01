@@ -1,11 +1,16 @@
 import { Button } from "@material-ui/core";
 import React from "react";
-import { TradeInstance, TradeMode } from "./Types";
+import { Relations } from "./Relations";
+import { updateRelation } from "./TradeReducer";
+import { Relation, TradeInstance, TradeMode } from "./Types";
 
 interface Props {
     trade: TradeInstance;
+    relations: Relation[];
+    dispatch: Function;
+    id: number;
 }
-export const Calculate = ({trade}: Props) => {
+export const Calculate = ({trade, relations, dispatch, id}: Props) => {
 
     const calculatePrice = () => {
         let isBuy = trade.Mode === TradeMode.Buy;
@@ -22,7 +27,24 @@ export const Calculate = ({trade}: Props) => {
         }
 
         alert(price);
+        increaseRelations();
         return price;        
+    }
+
+    const increaseRelations = () => {
+        let relationValue: number = trade.PortRelation.Value;       
+        const updatedTrade = {...trade};
+      
+        if(relationValue >= 500){
+            relationValue++;
+        } else {              
+            relationValue += Math.ceil(Math.min(trade.NumberOfGoods, 300) / 30);           
+        }
+                
+        updatedTrade.PortRelation.Value = relationValue;
+
+        dispatch(updateRelation(updatedTrade, relations, id));
+        
     }
     
     return (

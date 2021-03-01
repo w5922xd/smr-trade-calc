@@ -24,17 +24,16 @@ const updateRelations = (state: TradeState, action: Action) => {
     let sets = [...state.TradeSets];
     let newTradeState = {...state};
     let updatedRelation = {} as Relation;
-    debugger;
+    let payloadTrade: TradeInstance = {...action.Payload.Trade};
+
     for(let r in relations){
-        if(action.Payload.Trade.PortRelation.Race === relations[r].Race){
-            updatedRelation.Race = action.Payload.Trade.PortRelation.Race;
-            updatedRelation.Value = action.Payload.Trade.PortRelation.Value;
+        if(payloadTrade.Race === relations[r].Race){
+            updatedRelation.Race = payloadTrade.PortRelation.Race;
+            updatedRelation.Value = payloadTrade.PortRelation.Value;
             relations[r] = updatedRelation;
         }
     }
 
-
-    
     let isBuy = action.Payload.Trade.Mode === TradeMode.Buy;
     if(isBuy){        
         sets[action.Payload.Id].Buy = action.Payload.Trade;

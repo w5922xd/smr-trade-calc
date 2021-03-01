@@ -43,12 +43,8 @@ export const Relations = ({trade, id, relations, dispatch, handleChange}: Props)
     }
 
     const updateRelationValue = (event: any) => {
-        //const updatedRelation = {...trade.PortRelation};
-        //updatedRelation.Value = event.target.value;
-        console.log(event.target.value);
         const updatedTrade = {...trade};
-        updatedTrade.PortRelation.Value = event.target.value;
-        
+        updatedTrade.PortRelation.Value = parseInt(event.target.value);       
         dispatch(updateRelation(updatedTrade, relations, id));
     }
 

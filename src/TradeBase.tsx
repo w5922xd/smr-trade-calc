@@ -72,7 +72,7 @@ export const TradeBase = ({trade, dispatch, id, relations}: Props) => {
                     </Grid>
 
                     <Grid item xs={12}>
-                        <Calculate trade={trade} />
+                        <Calculate trade={trade} relations={relations} dispatch={dispatch} id={id} />
                     </Grid>
                 </Grid>
             </CardContent>
