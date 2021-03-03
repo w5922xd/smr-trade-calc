@@ -16,7 +16,7 @@ export const getTradeInstance = (mode: TradeMode, initialRelation: Relation): Tr
         NumberOfGoods: 250,
         Distance:  5,
         Stock:  4000,
-        PortRelation: initialRelation
+        PortRace: 'Neutral'
     }
 };
 
@@ -93,7 +93,7 @@ export const initialState = (): TradeState => {
     const factions = (): Relation[] => {
         let factionList: Relation[] = [];
         for (let f in Faction){
-            factionList.push({Race: f, Value: 0});
+            factionList.push({Race: f, Personal: 0, Political: 0});
         }
         console.log("factionlist", factionList);
         return factionList;

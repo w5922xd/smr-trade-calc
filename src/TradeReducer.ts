@@ -20,31 +20,11 @@ export const tradeReducer = (state: TradeState, action: Action): TradeState => {
 }
 
 const updateRelations = (state: TradeState, action: Action) => {
-    let relations: Relation[] = [...state.Relations];    
-    let sets = [...state.TradeSets];
     let newTradeState = {...state};
-    let updatedRelation = {} as Relation;
-    let payloadTrade: TradeInstance = {...action.Payload.Trade};
-
-    for(let r in relations){
-        if(payloadTrade.Race === relations[r].Race){
-            updatedRelation.Race = payloadTrade.PortRelation.Race;
-            updatedRelation.Value = payloadTrade.PortRelation.Value;
-            relations[r] = updatedRelation;
-        }
-    }
-
-    let isBuy = action.Payload.Trade.Mode === TradeMode.Buy;
-    if(isBuy){        
-        sets[action.Payload.Id].Buy = action.Payload.Trade;
-    } else {
-        sets[action.Payload.Id].Sell = action.Payload.Trade;
-    }
-
-    newTradeState.Relations = relations;
-    newTradeState.TradeSets = sets;
+    
+    newTradeState.Relations = [...action.Payload.Relations];
+    console.log(newTradeState);
     return newTradeState;
-
 }
 
 const updateTradeSet = (state: TradeState, action: Action) => {
@@ -89,14 +69,21 @@ export const addTradeSet = (trade: TradeInstance, id: number): Action => {
     };
   }
 
-export const updateRelation = (trade: TradeInstance, relations: Relation[], id: number) => {
+export const updateRelationAction = (relations: Relation[]) => {
     return {
         Type: ActionType.UpdateRelation,
+        Payload: {            
+            Relations: relations           
+        }
+      };
+}
+
+export const updateTradeAction = (trade: TradeInstance, id: number) => {
+    return {
+        Type: ActionType.UpdateTradeInstance,
         Payload: {
             Trade: trade, 
-            Relations: relations,
             Id: id
         }
       };
 }
-  

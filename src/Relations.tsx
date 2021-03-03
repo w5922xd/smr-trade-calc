@@ -1,77 +1,80 @@
-import { createStyles, FormControl, Grid, InputLabel, makeStyles, MenuItem, Select, TextField, Theme } from "@material-ui/core"
-import React, { useEffect } from "react"
-import { findRelation } from "./State";
-import { updateRelation } from "./TradeReducer";
-import { Relation, TradeInstance } from "./Types";
+import { Card, CardContent, CardHeader, createStyles, Grid, makeStyles, TextField, Theme, Typography } from "@material-ui/core"
+import React from "react"
+import { updateRelationAction } from "./TradeReducer";
+import { Relation, TradeState } from "./Types";
 
 interface Props {
-    trade: TradeInstance;
-    id: number;
-    relations: Relation[];
+    tradeState: TradeState;
     dispatch: Function;
-    handleChange: Function;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     formControl: {
       margin: theme.spacing(1),
-      width: 180,
+      width: 180
+    },
+    root: {
+        maxWidth: 350,
+        background: '#274472'
     }
   }),
 );
 
-
-export const Relations = ({trade, id, relations, dispatch, handleChange}: Props) => {
+export const Relations = ({tradeState, dispatch}: Props) => {
     const classes = useStyles();
 
-    useEffect(() => {
-        trade.PortRelation = findRelation(trade.PortRelation.Race, relations);
-    }, [relations]);
+    const updateRelationValue = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, relation: Relation, isPersonal: boolean) => {
+        const updatedRelations = [...tradeState.Relations];  
+        let updatedValue: number = parseInt(event.currentTarget.value);     
+       
+        if(isPersonal){
+            relation.Personal = updatedValue;
+        } else {
+            relation.Political = updatedValue;
+        }
 
-    const buildPortRaceItems = relations.map(r => {
-        return (
-            <MenuItem key={r.Race} value={r.Race} color="secondary">{r.Race}</MenuItem>
+
+        for(let u in updatedRelations){
+            if(relation.Race === updatedRelations[u].Race){
+                updatedRelations[u] = relation;
+            }
+        }
+        dispatch(updateRelationAction(updatedRelations));       
+    }
+
+    const buildList = tradeState.Relations.map(r => {
+        return (            
+            <Grid container>
+                <Grid item>
+                    <Grid container direction="column" spacing={1}>
+                        <Grid item>
+                            <Typography variant="subtitle2">
+                                {r.Race}
+                            </Typography>
+                        </Grid>
+                        <Grid item>
+                            <TextField label="Personal Relations" value={r.Personal} onChange={(e) => updateRelationValue(e, r, true)} />
+                        </Grid>
+                        <Grid item>
+                            <TextField label="Political Relations" value={r.Political} onChange={(e) => updateRelationValue(e, r, false)} />
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
         );
-    })
-    
+    });;
 
-    const updateRace = (event: any) => {
-        const updatedTrade = {...trade};
-        updatedTrade.PortRelation = findRelation(event.target.value, relations);
-        dispatch(updateRelation(updatedTrade, relations, id));
-    }
-
-    const updateRelationValue = (event: any) => {
-        const updatedTrade = {...trade};
-        updatedTrade.PortRelation.Value = parseInt(event.target.value);       
-        dispatch(updateRelation(updatedTrade, relations, id));
-    }
-
-    return ( 
-        <div>
-            <Grid item xs={12}>
-                <FormControl className={classes.formControl}>
-                    <InputLabel id="portRaceLabel">Port Race</InputLabel>
-                    <Select
-                        labelId="portRaceLabel"
-                        id="portRace"
-                        value={trade.PortRelation.Race}
-                        onChange={(e) => updateRace(e)}
-                        label="Port Race">
-
-                    {buildPortRaceItems}
-
-                    </Select>
-                </FormControl>
+    return (
+        <Card className={classes.root}  color="#61dafb">
+            <CardHeader>Relations</CardHeader>
+        <CardContent>
+            <Grid container spacing={0}>             
+                <Grid item>
+                  {buildList}  
+                </Grid>
             </Grid>
-            
-
-            <Grid item xs={12}>
-                <FormControl className={classes.formControl}>
-                    <TextField id="PortRelation" label="Port Relations" value={trade.PortRelation.Value} onChange={(e) => updateRelationValue(e)} />
-                </FormControl>
-            </Grid>
-        </div>
+        </CardContent>
+    </Card>
     )
 }

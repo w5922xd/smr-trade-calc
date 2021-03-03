@@ -17,7 +17,8 @@ export enum TradeMode {
 
 export interface Relation {
     Race: string;
-    Value: number;
+    Personal: number;
+    Political: number;
 }
 
 export interface TradeInstance {
@@ -27,7 +28,7 @@ export interface TradeInstance {
     NumberOfGoods: number;
     Distance: number;
     Stock: number;
-    PortRelation: Relation;
+    PortRace: string;
 }
 
 

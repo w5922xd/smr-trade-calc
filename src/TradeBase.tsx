@@ -1,17 +1,19 @@
 import React from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { FormControl, TextField, Grid, Card, CardContent } from '@material-ui/core';
+import { FormControl, TextField, Grid, Card, CardContent, InputLabel, Select, MenuItem } from '@material-ui/core';
 import { Relation, TradeInstance } from './Types';
 import { Calculate } from './Calculate';
 import { Goods } from './Goods';
-import { addTradeSet } from './TradeReducer';
+import { addTradeSet, updateRelationAction, updateTradeAction } from './TradeReducer';
 import { Relations } from './Relations';
+import { findRelation } from './State';
 
 interface Props{
     trade: TradeInstance;
     dispatch: Function;
     id: number;
     relations: Relation[];
+   
  }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -37,6 +39,18 @@ export const TradeBase = ({trade, dispatch, id, relations}: Props) => {
         dispatch(addTradeSet(updatedTrade, id));
     }
 
+    const updateRace = (event: any) => {
+        const updatedTrade = {...trade};
+        updatedTrade.PortRace = event.target.value;
+        dispatch(updateTradeAction(updatedTrade, id));
+    }
+
+    const buildPortRaceItems = relations.map(r => {
+        return (
+            <MenuItem key={r.Race} value={r.Race} color="secondary">{r.Race}</MenuItem>
+        );
+    })
+
     
     return (
         <Card className={classes.root} color="#61dafb">
@@ -47,7 +61,19 @@ export const TradeBase = ({trade, dispatch, id, relations}: Props) => {
                     </Grid>
 
                     <Grid item xs={12}>
-                        <Relations trade={trade} id={id} relations={relations} dispatch={dispatch} handleChange={handleChange} />
+                        <FormControl className={classes.formControl}>
+                            <InputLabel id="portRaceLabel">Port Race</InputLabel>
+                            <Select
+                                labelId="portRaceLabel"
+                                id="portRace"
+                                value={trade.PortRace}
+                                onChange={(e) => updateRace(e)}
+                                label="Port Race">
+
+                                {buildPortRaceItems}
+
+                            </Select>
+                        </FormControl>
                     </Grid>
 
                     <Grid item xs={12}>

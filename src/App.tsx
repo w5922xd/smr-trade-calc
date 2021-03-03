@@ -6,6 +6,7 @@ import { TradeState } from './Types';
 import { initialState } from './State';
 import { tradeReducer } from './TradeReducer';
 import { TradeStateManager } from './TradeStateManager';
+import { Relations } from './Relations';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,7 +49,15 @@ function App() {
         </Grid>
         
         <Grid item>
-          {buildTrades}
+          <Grid container direction="row">
+            <Grid item>
+              <Relations dispatch={dispatch} tradeState={tradeState} />
+            </Grid>
+            <Grid item>
+              {buildTrades}
+            </Grid>
+          </Grid>
+          
         </Grid>
 
       </Grid>
