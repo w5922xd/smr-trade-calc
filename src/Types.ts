@@ -34,7 +34,8 @@ export interface TradeInstance {
 
 export interface TradeState {
     TradeSets: TradeSet[];
-    Relations: Relation[];    
+    Relations: Relation[];
+    IncrementRelations: boolean; 
 }
 
 export interface Action {
@@ -59,7 +60,8 @@ export enum ActionType {
     RemoveTradeSet,
     UpdateTradeInstance,
     UpdateRelation,
-    SelectGood
+    SelectGood,
+    UpdateIncrementRelations
 }
 
 

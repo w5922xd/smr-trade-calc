@@ -1,7 +1,7 @@
-import { Card, CardContent, CardHeader, createStyles, Grid, makeStyles, TextField, Theme, Typography } from "@material-ui/core"
-import React from "react"
+import { Box, Card, CardContent, CardHeader, createStyles, FormControlLabel, Grid, makeStyles, Paper, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Theme, Typography } from "@material-ui/core"
+import React, { useState } from "react"
 import { updateRelationAction } from "./TradeReducer";
-import { Relation, TradeState } from "./Types";
+import { ActionType, Relation, TradeState } from "./Types";
 
 interface Props {
     tradeState: TradeState;
@@ -16,7 +16,22 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     root: {
         maxWidth: 350,
-        background: '#274472'
+        background: '#274472',
+        //position: '-webkit-sticky',
+        position: 'sticky',
+        top: 20,
+        bottom: 20, 
+        paddingTop: '40px',
+        paddingBottom: '40px',
+        zIndex: 5,
+    },
+    table: {
+        maxWidth: 300,
+        background: '#274472',
+        borderTopWidth: 0
+    },
+    thead: {
+      borderBottomColor: '#000'
     }
   }),
 );
@@ -43,38 +58,53 @@ export const Relations = ({tradeState, dispatch}: Props) => {
         dispatch(updateRelationAction(updatedRelations));       
     }
 
-    const buildList = tradeState.Relations.map(r => {
-        return (            
-            <Grid container>
-                <Grid item>
-                    <Grid container direction="column" spacing={1}>
-                        <Grid item>
-                            <Typography variant="subtitle2">
-                                {r.Race}
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <TextField label="Personal Relations" value={r.Personal} onChange={(e) => updateRelationValue(e, r, true)} />
-                        </Grid>
-                        <Grid item>
-                            <TextField label="Political Relations" value={r.Political} onChange={(e) => updateRelationValue(e, r, false)} />
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Grid>
-        );
-    });;
+    const handleChange = () => {
+      dispatch({Type: ActionType.UpdateIncrementRelations, Payload: { isIncremented: !tradeState.IncrementRelations }});
+    }
 
     return (
-        <Card className={classes.root}  color="#61dafb">
-            <CardHeader>Relations</CardHeader>
-        <CardContent>
-            <Grid container spacing={0}>             
-                <Grid item>
-                  {buildList}  
-                </Grid>
-            </Grid>
-        </CardContent>
-    </Card>
+        <Card className={classes.root}>
+        <Box m={1} p={1}>
+        <Typography variant="h5">
+            Port Relations
+        </Typography>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={tradeState.IncrementRelations}
+              onChange={handleChange}
+              name="checkedB"
+              color="primary"
+            />}
+          label="Primary"
+        />
+        <TableContainer component={Paper}>
+        <Table className={classes.table} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell  className={classes.thead}></TableCell>
+              <TableCell align="left"  className={classes.thead}>Personal</TableCell>
+              <TableCell align="left"  className={classes.thead}>Political</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {tradeState.Relations.map((row) => (
+              <TableRow key={row.Race} >
+                <TableCell component="th" scope="row" className={classes.thead}>
+                  {row.Race}
+                </TableCell>
+                <TableCell align="right"  className={classes.thead}>
+                  <TextField  inputProps={{min: 0, style: { textAlign: 'center' }}} value={row.Personal} onChange={(e) => updateRelationValue(e, row, true)} />
+                  </TableCell>
+                <TableCell align="right"  className={classes.thead}>
+                  <TextField  inputProps={{min: 0, style: { textAlign: 'center' }}} value={row.Political} onChange={(e) => updateRelationValue(e, row, false)} />
+                  </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      </Box>
+      </Card>
     )
 }

@@ -14,9 +14,17 @@ export const tradeReducer = (state: TradeState, action: Action): TradeState => {
         return updateTradeSet(state, action);
     case ActionType.UpdateRelation:
         return updateRelations(state, action);
+    case ActionType.UpdateIncrementRelations:
+        return updateIncrementRelations(state, action);
     default:
       return state;
   }
+}
+
+const updateIncrementRelations = (state: TradeState, action: Action) => {
+    let newTradeState = {...state};
+    newTradeState.IncrementRelations = action.Payload.isIncremented;
+    return newTradeState;
 }
 
 const updateRelations = (state: TradeState, action: Action) => {

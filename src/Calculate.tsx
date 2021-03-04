@@ -2,13 +2,12 @@ import { Box, Button, createStyles, Dialog, Grid, makeStyles, Theme, Typography 
 import React, { useEffect, useState } from "react";
 import { findRelation } from "./State";
 import { updateRelationAction } from "./TradeReducer";
-import { Relation, TradeInstance, TradeMode } from "./Types";
+import { Relation, TradeInstance, TradeMode, TradeState } from "./Types";
 
 interface Props {
     trade: TradeInstance;
-    relations: Relation[];
     dispatch: Function;
-    id: number;
+    relations: Relation[];
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -23,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 
-export const Calculate = ({trade, relations, dispatch, id}: Props) => {
+export const Calculate = ({trade, dispatch, relations}: Props) => {
     const classes = useStyles();
     const [open, setOpen]: [boolean, Function] = useState(false);
     const [price, setPrice]: [number, Function] = useState(0);    
@@ -32,7 +31,7 @@ export const Calculate = ({trade, relations, dispatch, id}: Props) => {
     const calculatePrice = () => {
         //setRelation(findRelation(trade.PortRace, relations));
         var relation = findRelation(trade.PortRace, relations);
-        console.error("yo", typeof(relation.Personal))
+        
         let isBuy = trade.Mode === TradeMode.Buy;
         let rate = isBuy ? 0.03 : 0.088;
         let priceRatio = trade.Good.Price * trade.NumberOfGoods;

@@ -95,13 +95,14 @@ export const initialState = (): TradeState => {
         for (let f in Faction){
             factionList.push({Race: f, Personal: 0, Political: 0});
         }
-        console.log("factionlist", factionList);
+        console.warn('This shouldnt fire allt he time')
         return factionList;
     }
 
     const relations = factions();
     return {
         TradeSets: [CreateTradeSet(0, relations[0])],
-        Relations: relations
+        Relations: relations,
+        IncrementRelations: true
     };
 };

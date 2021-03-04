@@ -5,8 +5,6 @@ import { Relation, TradeInstance } from './Types';
 import { Calculate } from './Calculate';
 import { Goods } from './Goods';
 import { addTradeSet, updateRelationAction, updateTradeAction } from './TradeReducer';
-import { Relations } from './Relations';
-import { findRelation } from './State';
 
 interface Props{
     trade: TradeInstance;
@@ -20,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     formControl: {
       margin: theme.spacing(1),
-      width: 180,
+      width: 180
     },
     root: {
         maxWidth: 350,
@@ -65,7 +63,7 @@ export const TradeBase = ({trade, dispatch, id, relations}: Props) => {
                             <InputLabel id="portRaceLabel">Port Race</InputLabel>
                             <Select
                                 labelId="portRaceLabel"
-                                id="portRace"
+                                id="portRace"                               
                                 value={trade.PortRace}
                                 onChange={(e) => updateRace(e)}
                                 label="Port Race">
@@ -98,7 +96,7 @@ export const TradeBase = ({trade, dispatch, id, relations}: Props) => {
                     </Grid>
 
                     <Grid item xs={12}>
-                        <Calculate trade={trade} relations={relations} dispatch={dispatch} id={id} />
+                        <Calculate trade={trade} relations={relations} dispatch={dispatch} />
                     </Grid>
                 </Grid>
             </CardContent>
