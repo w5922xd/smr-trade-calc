@@ -1,6 +1,6 @@
-import React, { useReducer } from 'react';
+import { useReducer } from 'react';
 import './App.css';
-import { Box, createStyles, Grid, Hidden, makeStyles, Theme, Typography } from '@material-ui/core';
+import {  Grid, Typography } from '@material-ui/core';
 import { TradeBase } from './TradeBase';
 import { TradeState } from './Types';
 import { initialState } from './State';
@@ -8,16 +8,7 @@ import { tradeReducer } from './TradeReducer';
 import { TradeStateManager } from './TradeStateManager';
 import { Relations } from './Relations';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    overflow: {
-      overflow: 'Hidden'      
-    }
-  }),
-);
-
 function App() {
-  const classes = useStyles();
   const [tradeState, dispatch] : [TradeState, Function] = useReducer(tradeReducer, initialState());
   
   return (

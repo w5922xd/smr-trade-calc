@@ -1,7 +1,7 @@
-import { Box, Card, CardContent, CardHeader, createStyles, FormControlLabel, Grid, makeStyles, Paper, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Theme, Typography } from "@material-ui/core"
-import React, { useState } from "react"
+import { Box, Card, createStyles, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Theme, Typography } from "@material-ui/core"
+import React from "react"
 import { updateRelationAction } from "./TradeReducer";
-import { ActionType, Relation, TradeState } from "./Types";
+import { Relation, TradeState } from "./Types";
 
 interface Props {
     tradeState: TradeState;
@@ -58,9 +58,9 @@ export const Relations = ({tradeState, dispatch}: Props) => {
         dispatch(updateRelationAction(updatedRelations));       
     }
 
-    const handleChange = () => {
-      dispatch({Type: ActionType.UpdateIncrementRelations, Payload: { isIncremented: !tradeState.IncrementRelations }});
-    }
+    // const handleChange = () => {
+    //   dispatch({Type: ActionType.UpdateIncrementRelations, Payload: { isIncremented: !tradeState.IncrementRelations }});
+    // }
 
     return (
         <Card className={classes.root}>
@@ -68,7 +68,7 @@ export const Relations = ({tradeState, dispatch}: Props) => {
         <Typography variant="h5">
             Port Relations
         </Typography>
-        <FormControlLabel
+        {/* <FormControlLabel
           control={
             <Switch
               checked={tradeState.IncrementRelations}
@@ -76,8 +76,8 @@ export const Relations = ({tradeState, dispatch}: Props) => {
               name="checkedB"
               color="primary"
             />}
-          label="Primary"
-        />
+          label="Increment"
+        /> */}
         <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="simple table">
           <TableHead>

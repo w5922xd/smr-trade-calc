@@ -1,13 +1,14 @@
 import { Box, Button, createStyles, Dialog, Grid, makeStyles, Theme, Typography } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { findRelation } from "./State";
 import { updateRelationAction } from "./TradeReducer";
-import { Relation, TradeInstance, TradeMode, TradeState } from "./Types";
+import { Relation, TradeInstance, TradeMode } from "./Types";
 
 interface Props {
     trade: TradeInstance;
     dispatch: Function;
     relations: Relation[];
+    incrementRelations?: boolean;
 }
 
 const useStyles = makeStyles((theme: Theme) =>

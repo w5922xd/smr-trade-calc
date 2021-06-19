@@ -1,4 +1,4 @@
-import { Faction as Faction, Relation, TradeGood, TradeInstance, TradeMode, TradeSet, TradeState } from "./Types";
+import { Faction, Relation, TradeGood, TradeInstance, TradeMode, TradeSet, TradeState } from "./Types";
 
 export const CreateTradeSet = (id: number, initialRelation: Relation): TradeSet => {
     return {

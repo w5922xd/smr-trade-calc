@@ -1,10 +1,11 @@
 import React from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { FormControl, TextField, Grid, Card, CardContent, InputLabel, Select, MenuItem } from '@material-ui/core';
-import { Relation, TradeInstance } from './Types';
+import { Relation, TradeInstance, TradeMode } from './Types';
 import { Calculate } from './Calculate';
 import { Goods } from './Goods';
-import { addTradeSet, updateRelationAction, updateTradeAction } from './TradeReducer';
+import { addTradeSet, updateTradeAction } from './TradeReducer';
+import { CardHeader } from '@material-ui/core';
 
 interface Props{
     trade: TradeInstance;
@@ -52,6 +53,7 @@ export const TradeBase = ({trade, dispatch, id, relations}: Props) => {
     
     return (
         <Card className={classes.root} color="#61dafb">
+            <CardHeader title= {trade.Mode === TradeMode.Buy ? 'Buy' : 'Sell'} />
             <CardContent >
                 <Grid container spacing={0}>             
                     <Grid item xs={12}>
