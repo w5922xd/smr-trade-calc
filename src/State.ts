@@ -83,6 +83,10 @@ export const TradeGoods =  [
         Price: 231,
         StockMax: 4000
     },{
+        Name: 'Computers', 
+        Price: 196,
+        StockMax: 4000
+    },{
         Name: 'Narcotics', 
         Price: 259,
         StockMax: 4000
