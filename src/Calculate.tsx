@@ -41,12 +41,17 @@ export const Calculate = ({trade, dispatch, relations}: Props) => {
         let relationRatio = combinedRelations / 1000;
         let price; 
         console.log("calc trade: ", trade, rate, priceRatio, relationRatio, stockRatio);
+
+        
         if(isBuy){
             price = Math.round(rate * priceRatio * Math.pow(trade.Distance, 1.3) * (2 - stockRatio) * (3 - 2 * relationRatio));
+            price = Math.round(price * 1.002); //stupidnewbie suggested we try and account for inventory increases by adding a .002 multiplier for buy/sell.
         } else {
             price = Math.round(rate * priceRatio * Math.pow(trade.Distance, 1.3) * (1 + stockRatio) * (1.2 + 1.8 * relationRatio));
+            price = Math.round(0.998); //stupidnewbie suggested we try and account for inventory increases by adding a .002 multiplier for buy/sell.
         }
 
+        
         setPrice(price)
         setOpen(true)
         increaseRelations(relation);        
