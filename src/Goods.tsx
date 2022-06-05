@@ -1,6 +1,5 @@
 import { createStyles, FormControl, InputLabel, makeStyles, MenuItem, Select, Theme } from "@material-ui/core"
-import React from "react"
-import { findTradeGood, TradeGoods } from "./State";
+import { FindTradeGood, TradeGoods } from "./SMR";
 import { ActionType, TradeInstance } from "./Types";
 
 interface Props {
@@ -23,7 +22,7 @@ export const Goods = ({trade, dispatch, id} : Props) => {
 
     const updateGood = (event: any) => {
         const updatedTrade = {...trade};
-        updatedTrade.Good = findTradeGood(event.target.value);
+        updatedTrade.Good = FindTradeGood(event.target.value);
         dispatch({
             Type: ActionType.UpdateTradeInstance, 
             Payload: {

@@ -1,6 +1,6 @@
 import { Box, Button, createStyles, Dialog, Grid, makeStyles, Theme, Typography } from "@material-ui/core";
 import { useState } from "react";
-import { findRelation } from "./State";
+import { CalculateBuy, CalculateSell, FindRelation } from "./SMR";
 import { updateRelationAction } from "./TradeReducer";
 import { Relation, TradeInstance, TradeMode } from "./Types";
 
@@ -26,32 +26,11 @@ const useStyles = makeStyles((theme: Theme) =>
 export const Calculate = ({trade, dispatch, relations}: Props) => {
     const classes = useStyles();
     const [open, setOpen]: [boolean, Function] = useState(false);
-    const [price, setPrice]: [number, Function] = useState(0);    
-    //const [relation, setRelation]: [Relation, Function] = useState(findRelation(trade.PortRace, relations));
+    const [price, setPrice]: [number, Function] = useState(0);        
 
-    const calculatePrice = () => {
-        //setRelation(findRelation(trade.PortRace, relations));
-        var relation = findRelation(trade.PortRace, relations);
-        
-        let isBuy = trade.Mode === TradeMode.Buy;
-        let rate = isBuy ? 0.03 : 0.088;
-        let priceRatio = trade.Good.Price * trade.NumberOfGoods;
-        let stockRatio = trade.Stock / trade.Good.StockMax;        
-        let combinedRelations = relation.Personal + relation.Political;
-        let relationRatio = combinedRelations / 1000;
-        let price; 
-        console.log("calc trade: ", trade, rate, priceRatio, relationRatio, stockRatio);
-
-        
-        if(isBuy){
-            price = Math.round(rate * priceRatio * Math.pow(trade.Distance, 1.3) * (2 - stockRatio) * (3 - 2 * relationRatio));
-            price = Math.round(price * 1.002); //stupidnewbie suggested we try and account for inventory increases by adding a .002 multiplier for buy/sell.
-        } else {
-            price = Math.round(rate * priceRatio * Math.pow(trade.Distance, 1.3) * (1 + stockRatio) * (1.2 + 1.8 * relationRatio));
-            price = Math.round(0.998); //stupidnewbie suggested we try and account for inventory increases by adding a .002 multiplier for buy/sell.
-        }
-
-        
+    const calculatePrice = () => {        
+        var relation = FindRelation(trade.PortRace, relations);
+        let price = trade.Mode === TradeMode.Buy ? CalculateBuy(trade, relation) : CalculateSell(trade, relation);    
         setPrice(price)
         setOpen(true)
         increaseRelations(relation);        

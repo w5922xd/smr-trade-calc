@@ -64,6 +64,12 @@ export enum ActionType {
     UpdateIncrementRelations
 }
 
+export interface TradeRatio {
+    priceRatio: number;
+    stockRatio: number;
+    relationRatio: number;
+}
+
 
 
 
