@@ -1,6 +1,6 @@
 import { Box, Button, createStyles, Dialog, Grid, makeStyles, Theme, Typography } from "@material-ui/core";
 import { useState } from "react";
-import { CalculateBuy, CalculateSell, FindRelation } from "./SMR";
+import { CalculateBuy, CalculateSell, FindRelation, IncreaseRelations } from "./SMR";
 import { updateRelationAction } from "./TradeReducer";
 import { Relation, TradeInstance, TradeMode } from "./Types";
 
@@ -33,33 +33,16 @@ export const Calculate = ({trade, dispatch, relations}: Props) => {
         let price = trade.Mode === TradeMode.Buy ? CalculateBuy(trade, relation) : CalculateSell(trade, relation);    
         setPrice(price)
         setOpen(true)
-        increaseRelations(relation);        
+        
+        const updatedRelations = IncreaseRelations(relation, relations, trade);
+        dispatch(updateRelationAction(updatedRelations));
+         
         return price;        
     }
 
     const handleClose = () => {
         setOpen(!open);
-      };
-
-    const increaseRelations = (newRelation: Relation) => {
-        let relationValue: number = newRelation.Personal;       
-        const updatedRelations = [...relations];
-      
-        if(relationValue >= 500){
-            relationValue++;
-        } else {              
-            relationValue += Math.ceil(Math.min(trade.NumberOfGoods, 300) / 30);           
-        }
-
-        for(let r in updatedRelations){
-            if(updatedRelations[r].Race === newRelation.Race){
-                updatedRelations[r].Personal = relationValue;
-            }
-        }
-                
-        dispatch(updateRelationAction(updatedRelations));
-        
-    }
+    };   
 
     const copyPrice = () =>  {
         navigator.clipboard.writeText(price.toString());

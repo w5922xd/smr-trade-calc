@@ -10,6 +10,24 @@ export const CalculateSell = (trade: TradeInstance, relation: Relation) => {
     return Math.round(0.088 * tradeRatio.priceRatio * Math.pow(trade.Distance, 1.3) * (1 + tradeRatio.stockRatio) * (1.2 + 1.8 * tradeRatio.relationRatio));
 }
 
+export const IncreaseRelations = (newRelation: Relation, relations: Relation[], trade: TradeInstance): Relation[] => {
+    let relationValue: number = newRelation.Personal;       
+    const updatedRelations = [...relations];
+  
+    if(relationValue >= 500){
+        relationValue++;
+    } else {              
+        relationValue += Math.ceil(Math.min(trade.NumberOfGoods, 300) / 30);           
+    }
+
+    for(let r in updatedRelations){
+        if(updatedRelations[r].Race === newRelation.Race){
+            updatedRelations[r].Personal = relationValue;
+        }
+    }
+    return updatedRelations;
+}
+
 export const FindTradeGood = (goodName: string): TradeGood => {
     let tradeGood = {} as TradeGood;
     for(let t in TradeGoods){

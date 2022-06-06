@@ -31,7 +31,7 @@ const updateRelations = (state: TradeState, action: Action) => {
     let newTradeState = {...state};
     
     newTradeState.Relations = [...action.Payload.Relations];
-    console.log(newTradeState);
+    localStorage.setItem('relations', JSON.stringify(newTradeState.Relations));
     return newTradeState;
 }
 
@@ -46,6 +46,7 @@ const updateTradeSet = (state: TradeState, action: Action) => {
     } else {
         sets[action.Payload.Id].Sell = tradeInstance;
     }
+    localStorage.setItem('tradeSets', JSON.stringify(sets));
     return {...state, TradeSets: sets};
 
 }

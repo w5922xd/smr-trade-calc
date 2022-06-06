@@ -27,11 +27,13 @@ export const initialState = (): TradeState => {
         for (let f in Faction){
             factionList.push({Race: f, Personal: 0, Political: 0});
         }
-        console.warn('This shouldnt fire allt he time')
+        console.warn('This shouldnt fire all the time')
         return factionList;
     }
 
-    const relations = factions();
+    var storedRelations = localStorage.getItem("relations");
+    let relations = !storedRelations ? factions() : JSON.parse(storedRelations);
+    
     return {
         TradeSets: [CreateTradeSet(0, relations[0])],
         Relations: relations,

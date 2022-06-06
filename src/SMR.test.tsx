@@ -1,5 +1,6 @@
 import { Relation, TradeInstance } from './Types';
-import { CalculateBuy, CalculateSell, FindRelation, FindTradeGood } from './SMR';
+import { CalculateBuy, CalculateSell, FindRelation, FindTradeGood, IncreaseRelations } from './SMR';
+import { initialState } from './State';
 
 test("CalculateBuy", () => {
     const result = CalculateBuy(mockTradeInstance, mockRelation);
@@ -21,7 +22,29 @@ test("FindRelation", () => {
     expect(result.Political).toBe(mockRelation.Political);
 });
 
+test("IncreaseRelationsFromZero", () => {
+    var tradeState = initialState();
+    
+    IncreaseRelations(mockRelation, tradeState.Relations, mockTradeInstance);
 
+    const relation = FindRelation(mockRelation.Race, tradeState.Relations);
+    
+    expect(relation.Personal).toBe(9);
+});
+
+// Should increment by 1. 
+test("IncreaseRelationsFrom500", () => {
+    var tradeState = initialState();
+
+    const testRelation = Object.assign({}, mockRelation);
+    testRelation.Personal = 500;
+
+    IncreaseRelations(testRelation, tradeState.Relations, mockTradeInstance);
+
+    const relation = FindRelation(testRelation.Race, tradeState.Relations);
+    
+    expect(relation.Personal).toBe(501);
+});
 
 const mockTradeInstance  = {
     "Mode": 0,
