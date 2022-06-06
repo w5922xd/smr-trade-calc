@@ -31,11 +31,14 @@ export const initialState = (): TradeState => {
         return factionList;
     }
 
-    var storedRelations = localStorage.getItem("relations");
-    let relations = !storedRelations ? factions() : JSON.parse(storedRelations);
+    const storedRelations = localStorage.getItem("relations");
+    const relations = !storedRelations ? factions() : JSON.parse(storedRelations);
+
+    const storedTradeSets = localStorage.getItem('tradeSets');
+    const tradeSets = !storedTradeSets ? [CreateTradeSet(0, relations[0])] : JSON.parse(storedTradeSets);
     
     return {
-        TradeSets: [CreateTradeSet(0, relations[0])],
+        TradeSets: tradeSets,
         Relations: relations,
         IncrementRelations: true
     };

@@ -54,6 +54,7 @@ const updateTradeSet = (state: TradeState, action: Action) => {
 export const incrementTradeSet = (state: TradeState) => {
     let sets = [...state.TradeSets];
     sets.push(CreateTradeSet(state.TradeSets.length, state.Relations[0]));
+    localStorage.setItem('tradeSets', JSON.stringify(sets));
     return {...state, TradeSets: sets};
 }
 
@@ -65,6 +66,7 @@ export const decrementTradeSet = (state: TradeState) => {
     }
     
     sets.splice(-1,1);
+    localStorage.setItem('tradeSets', JSON.stringify(sets));
     return {...state, TradeSets: sets};;
 }
 
